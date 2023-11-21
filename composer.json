@@ -1,0 +1,34 @@
+{
+    "name": "la09r/web-fullstack-starter-kit-ui-vue-inertia-users",
+    "type": "library",
+    "description": "Users for Starter Kit Laravel UI Vue Inertia",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Aleksandr Gorchakov",
+            "email": "alexander.gorchakov.leto@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/support": "^10.32"
+    },
+    "autoload": {
+        "psr-4": {
+            "LA09R\\StarterKit\\UI\\Vue\\Inertia\\Users\\App\\": "src/app/",
+            "LA09R\\StarterKit\\UI\\Vue\\Inertia\\Users\\App\\Providers\\": "src/app/Providers",
+            "LA09R\\StarterKit\\UI\\Vue\\Inertia\\Users\\App\\Http\\Controllers\\": "src/app/Http/Controllers"
+        },
+        "files": [
+
+        ]
+
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LA09R\\StarterKit\\UI\\Vue\\Inertia\\Users\\App\\Providers\\AppServiceProvider"
+            ]
+        }
+    }
+}

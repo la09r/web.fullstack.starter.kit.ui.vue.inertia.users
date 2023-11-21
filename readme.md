@@ -17,6 +17,7 @@
   - in `config/app.php` add to `aliases`:
     ```
     App\Http\Controllers\Auth\LoginController::class => LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Controllers\Auth\LoginController::class
+    App\Providers\RouteServiceProvider::class        => LA09R\StarterKit\UI\Vue\Inertia\Users\App\Providers\RouteServiceProvider::class,
     ```
     in `app/Http/Kernel.php` replace from `protected $middleware array`:
     ```

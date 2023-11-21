@@ -14,7 +14,22 @@
   - copy **homestead.backend..sh** files to `DOCUMENT_ROOT`
   - update **+x** permission for ***.sh** files,
   - exec `homestead.backend..1.sh`
-
+  - in `config/app.php` add to `aliases`:
+    ```
+    App\Http\Controllers\Auth\LoginController::class => LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Controllers\Auth\LoginController::class
+    ```
+    in `app/Http/Kernel.php` replace from `protected $middleware array`:
+    ```
+    \LA09R\StarterKit\UI\Vue\Inertia\App\Http\Middleware\HandleInertiaRequests::class,
+    ```
+    to
+    ```
+    \LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Middleware\HandleInertiaRequests::class,
+    ```
+    in `app/Http/Kernel.php` uncomment
+    ```
+    \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+    ```
 1. on **Host** machine:
   - copy **host.frontend..sh** files to `DOCUMENT_ROOT`
   - update **+x** permission for ***.sh** files,

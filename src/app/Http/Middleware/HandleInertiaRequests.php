@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Middleware;
 
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Http\Request;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Middleware;
 
-class HandleInertiaRequests extends Middleware
+class HandleInertiaRequests extends \LA09R\StarterKit\UI\Vue\Inertia\App\Http\Middleware\HandleInertiaRequests
 {
     /**
      * The root template that's loaded on the first page visit.

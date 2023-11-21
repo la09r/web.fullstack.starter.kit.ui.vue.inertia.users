@@ -24,14 +24,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../../routes/web.php'          => base_path('routes/web.php'),
-            __DIR__ . '/../../routes/api.php'          => base_path('routes/api.php'),
-
-            __DIR__ . '/../../app/Http/Controllers/Auth/LoginController.php' => app_path('Http/Controllers/Auth/LoginController.php'),
-
-            __DIR__ . '/../../app/Http/Middleware/HandleInertiaRequests.php' => app_path('Http/Middleware/HandleInertiaRequests.php'),
-            __DIR__ . '/../../app/Http/Kernel.php'                           => app_path('Http/Kernel.php'),
-
             __DIR__ . '/../../resources/js/app.js.php' => resource_path('js/app.js'),
             __DIR__ . '/../../resources/sass/app.scss' => resource_path('sass/app.scss'),
 

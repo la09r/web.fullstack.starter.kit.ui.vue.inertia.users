@@ -3,7 +3,7 @@
 
 git add . && git commit -m 'add last changes'
 
-composer require la09r/web-fullstack-starter-kit-ui-vue-inertia-users:10.0.2
+composer require la09r/web-fullstack-starter-kit-ui-vue-inertia-users:10.0.3
 
 php artisan vendor:publish --provider="LA09R\StarterKit\UI\Vue\Inertia\Users\App\Providers\AppServiceProvider" --force
 

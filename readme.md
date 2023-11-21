@@ -30,6 +30,14 @@
     ```
     \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
     ```
+    in `config/app.php` replace from `providers`:
+    ```
+    LA09R\StarterKit\UI\Vue\Inertia\App\Providers\RouteServiceProvider::class
+    ```
+    to
+    ```
+    LA09R\StarterKit\UI\Vue\Inertia\Users\App\Providers\RouteServiceProvider::class,
+    ```
 1. on **Host** machine:
   - copy **host.frontend..sh** files to `DOCUMENT_ROOT`
   - update **+x** permission for ***.sh** files,

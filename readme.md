@@ -4,7 +4,7 @@
 
 1. **Homestead** virtual machine:
   - installed and configured for cli: PHP v. 8.1, Composer, Git
-1. **Host** machine:
+2**Host** machine:
   - installed and configured for cli: Node(JavaScript runtime environment) v. 18
 
 ## Install
@@ -14,32 +14,34 @@
   - copy **homestead.backend..sh** files to `DOCUMENT_ROOT`
   - update **+x** permission for ***.sh** files,
   - exec `homestead.backend..1.sh`
-  - in `config/app.php` add to `aliases`:
-    ```
+  - in `config/app.php` in `aliases`:
+    ```php
+    // remove:
+    `App\Providers\RouteServiceProvider::class` => ..
+    // add:
     App\Http\Controllers\Auth\LoginController::class => LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Controllers\Auth\LoginController::class
     App\Providers\RouteServiceProvider::class        => LA09R\StarterKit\UI\Vue\Inertia\Users\App\Providers\RouteServiceProvider::class,
     ```
-    in `app/Http/Kernel.php` replace from `protected $middleware array`:
-    ```
-    \LA09R\StarterKit\UI\Vue\Inertia\App\Http\Middleware\HandleInertiaRequests::class,
-    ```
-    to
-    ```
-    \LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Middleware\HandleInertiaRequests::class,
-    ```
-    in `app/Http/Kernel.php` uncomment
-    ```
-    \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-    ```
-    in `config/app.php` replace from `providers`:
-    ```
+  - in `config/app.php` in `providers`:
+    ```php
+    // remove:
     LA09R\StarterKit\UI\Vue\Inertia\App\Providers\RouteServiceProvider::class
-    ```
-    to
-    ```
+    // add:
     LA09R\StarterKit\UI\Vue\Inertia\Users\App\Providers\RouteServiceProvider::class,
     ```
-1. on **Host** machine:
+  - in `app/Http/Kernel.php` in `protected $middleware array`:
+    ```php
+    // remove:
+    \LA09R\StarterKit\UI\Vue\Inertia\App\Http\Middleware\HandleInertiaRequests::class,
+    // add:
+    \LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Middleware\HandleInertiaRequests::class,
+    ```
+  - in `app/Http/Kernel.php` uncomment
+    ```php
+    \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+    ```
+    
+2. on **Host** machine:
   - copy **host.frontend..sh** files to `DOCUMENT_ROOT`
   - update **+x** permission for ***.sh** files,
   - replace `#!/bin/zsh` from **host.frontend..sh** files to you **bash** bin path

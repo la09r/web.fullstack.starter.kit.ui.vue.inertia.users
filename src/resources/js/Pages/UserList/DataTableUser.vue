@@ -1,7 +1,7 @@
 <template>
-    <DataTable :value="users" tableStyle="min-width: 50rem">
-        <Column field="id" header="ID"></Column>
-        <Column field="name" header="Name">
+    <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
+        <Column sortable field="id" header="ID"></Column>
+        <Column sortable field="name" header="Name">
             <template #body="slotProps">
                 <div class="d-flex align-items-center">
                     <Button class="me-2" @click="$emit('showModalEditUser', {id: slotProps.data.id})" icon="pi pi-user-edit" label="Edit" severity="primary"></Button>
@@ -9,7 +9,7 @@
                 </div>
             </template>
         </Column>
-        <Column field="email" header="Email"></Column>
+        <Column sortable field="email" header="Email"></Column>
         <Column field="id" header="Action">
             <template #body="slotProps">
                 <Button @click="confirmDelete({id: slotProps.data.id})" icon="pi pi-times" label="Delete" severity="danger"></Button>

@@ -11,7 +11,4 @@
 |
 */
 
-Auth::routes();
-
-LA09R\StarterKit\UI\Vue\Inertia\App\Router::routes();
 LA09R\StarterKit\UI\Vue\Inertia\Users\App\Router::webRoutes();

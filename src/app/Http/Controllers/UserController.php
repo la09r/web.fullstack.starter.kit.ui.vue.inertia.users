@@ -20,6 +20,13 @@ class UserController extends Controller
         ]);
     }
 
+    public function webProfile(Request $request)
+    {
+        return Inertia::render('UserProfile/Index', [
+
+        ]);
+    }
+
     public function apiList(Request $request)
     {
         $filter = [];

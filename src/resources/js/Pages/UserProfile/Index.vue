@@ -1,14 +1,13 @@
 <template>
     <NavLogin />
-  <CardLayoutFluid title="Dashboard">
-    {{ text }} 3 <br>
-    <Link class="link-primary" :href="route('route.dashboard.welcome')">Welcome</Link>
-  </CardLayoutFluid>
+  <CardLayout title="Home">
+    User Profile
+  </CardLayout>
 </template>
 
 <script setup>
   import { Link } from '@inertiajs/vue3';
-  import CardLayoutFluid from "@/Layouts/CardLayoutFluid.vue";
+  import CardLayout from "@/Layouts/CardLayout.vue";
   import NavLogin from "@/components/Dashboard/Nav.vue";
 </script>
 <script>

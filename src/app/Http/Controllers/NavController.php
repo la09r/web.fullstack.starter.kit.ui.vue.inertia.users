@@ -63,9 +63,21 @@ class NavController extends Controller
                         'menu' => [
                             'condition' => strpos($routePath, 'dashboard'),
                             'items' => [
+//                                [
+//                                    'title' => __('Permissions'),
+//                                    'link'  => route('web.route.dashboard.permission.list'),
+//                                ],
+//                                [
+//                                    'title' => __('Roles'),
+//                                    'link'  => route('web.route.dashboard.role.list'),
+//                                ],
                                 [
                                     'title' => __('Users'),
                                     'link'  => route('web.route.dashboard.user.list'),
+                                ],
+                                [
+                                    'title' => __('Profile'),
+                                    'link'  => route('web.route.dashboard.profile.list'),
                                 ],
                             ]
                         ]

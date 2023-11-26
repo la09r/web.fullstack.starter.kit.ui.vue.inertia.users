@@ -23,33 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            __DIR__ . '/../../resources/js/app.js.php' => resource_path('js/app.js'),
-            __DIR__ . '/../../resources/sass/app.scss' => resource_path('sass/app.scss'),
-
-            __DIR__ . '/../../resources/views/auth/nav/dashboard.blade.php' => resource_path('views/auth/nav/dashboard.blade.php'),
-            __DIR__ . '/../../resources/views/layouts/auth.blade.php'       => resource_path('views/layouts/auth.blade.php'),
-            __DIR__ . '/../../resources/views/layouts/dashboard.blade.php'  => resource_path('views/layouts/dashboard.blade.php'),
-            __DIR__ . '/../../resources/views/layouts/public.blade.php'     => resource_path('views/layouts/public.blade.php'),
-            __DIR__ . '/../../resources/views/error.blade.php'              => resource_path('views/error.blade.php'),
-
-            __DIR__ . '/../../resources/js/components/Dashboard/Nav.vue'    => resource_path('js/components/Dashboard/Nav.vue'),
-            __DIR__ . '/../../resources/js/Layouts/CardLayoutFluid.vue'     => resource_path('js/Layouts/CardLayoutFluid.vue'),
-            __DIR__ . '/../../resources/js/Pages/Dashboard/Index.vue'       => resource_path('js/Pages/Dashboard/Index.vue'),
-            __DIR__ . '/../../resources/js/Pages/Public/Index.vue'          => resource_path('js/Pages/Public/Index.vue'),
-        ]);
-
-        try
-        {
-            unlink(resource_path('views/home.blade.php'));
-            unlink(resource_path('views/welcome.blade.php'));
-            unlink(resource_path('views/layouts/app.blade.php'));
-            unlink(resource_path('views/auth/nav/public.blade.php'));
-            unlink(resource_path('js/components/ExampleComponent.vue'));
-        }
-        catch (\Exception | \Error $e)
-        {
-
-        }
+        //
     }
 }

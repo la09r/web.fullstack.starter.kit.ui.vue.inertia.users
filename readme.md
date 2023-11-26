@@ -16,16 +16,11 @@
   - exec `homestead.backend..1.sh`
   - in `config/app.php` in `aliases`:
     ```php
-    // remove:
-    `App\Providers\RouteServiceProvider::class` => ..
     // add:
     App\Http\Controllers\Auth\LoginController::class => LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Controllers\Auth\LoginController::class
-    App\Providers\RouteServiceProvider::class        => LA09R\StarterKit\UI\Vue\Inertia\Users\App\Providers\RouteServiceProvider::class,
     ```
   - in `config/app.php` in `providers`:
     ```php
-    // remove:
-    LA09R\StarterKit\UI\Vue\Inertia\App\Providers\RouteServiceProvider::class
     // add:
     LA09R\StarterKit\UI\Vue\Inertia\Users\App\Providers\RouteServiceProvider::class,
     ```

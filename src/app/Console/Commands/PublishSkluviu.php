@@ -10,7 +10,7 @@ class PublishSkluviu extends PublishFiles
     
     private const FILES = [
         'resources/php/menu/Dashboard/users.php'                      => 'php/menu/Dashboard/users.php',
-        'resources/js/ComponentsAsync/Dashboard/Widget/UsersStat.vue' => 'js/ComponentsAsync/Dashboard/Widget/MainStat.vue',
+        'resources/js/ComponentsAsync/Dashboard/Widget/UsersStat.vue' => 'js/ComponentsAsync/Dashboard/Widget/UsersStat.vue',
     ];
     
     protected $signature   = 'app:publish-skluviu';

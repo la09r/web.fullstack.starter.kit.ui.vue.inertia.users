@@ -18,7 +18,7 @@ class Router
         Route::middleware(['auth'])->group(function () {
             Route::get('/dashboard/user/list', [ UserController::class, 'webList' ])->name('web.route.dashboard.user.list');
 //            Route::get('/dashboard/role/list', [ UserController::class, 'webRoleList' ])->name('web.route.dashboard.role.list');
-            Route::get('/dashboard/profile', [ UserController::class, 'webProfile' ])->name('web.route.dashboard.profile.list');
+            Route::get('/dashboard/profile', [ UserController::class, 'webProfile' ])->name('web.route.dashboard.profile');
 //            Route::get('/dashboard/permission', [ UserController::class, 'webPermissionList' ])->name('web.route.dashboard.permission.list');
         });
     }

@@ -14,34 +14,72 @@
   - copy **homestead.backend..sh** files to `DOCUMENT_ROOT`
   - update **+x** permission for ***.sh** files,
   - exec `homestead.backend..1.sh`
-  - in `config/app.php` in `aliases`:
-    ```php
-    // add:
-    App\Http\Controllers\Auth\LoginController::class => LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Controllers\Auth\LoginController::class
-    ```
   - in `config/app.php` in `providers`:
     ```php
     // add:
     LA09R\StarterKit\UI\Vue\Inertia\Users\App\Providers\RouteServiceProvider::class,
     ```
-  - in `app/Http/Kernel.php` in `protected $middleware array`:
-    ```php
-    // remove:
-    \LA09R\StarterKit\UI\Vue\Inertia\App\Http\Middleware\HandleInertiaRequests::class,
-    // add:
-    \LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Middleware\HandleInertiaRequests::class,
+  - in `resources/js/packages.js` add:
+    ```js
+    users: {
+        store: {
+            state: {
+                Page: {
+                    UserListIndex: {
+                        visibleModalAdd: false,
+                        forceUsersListCounter: 0
+                    },
+                },
+                Component: {
+                    UserProfileForm: {
+                        route: '',
+                        text: {
+                            buttonSubmitText: '',
+                            headerText: '',
+                        },
+                        parameters: {},
+                    }
+                }
+            },
+            mutations: {
+                usersUserListIndexModalUpdateCommit: function(state) {
+                    state.users.Page.UserListIndex.visibleModalAdd = !state.users.Page.UserListIndex.visibleModalAdd;
+                },
+                usersUserProfileFormCommit: function(state, arg) {
+                    state.users.Component.UserProfileForm = {
+                        route:  arg.route,
+                        text:   arg.text,
+                        parameters: arg.parameters,
+                    };
+                },
+                usersUserListIndexUpdateCommit: function(state) {
+                    state.users.Page.UserListIndex.forceUsersListCounter += 1;
+                },
+            }
+        },
+        name: "Users",
+        pages: {
+            match: ['UserList/Index', 'UserProfile/Index', ],
+            resolve: function () {
+                return {
+                    path: `../../vendor/la09r/web-fullstack-starter-kit-ui-vue-inertia-users/src/resources/js/Pages/%PAGE_NAME%.vue`,
+                    pathImport: import.meta.glob(`../../vendor/la09r/web-fullstack-starter-kit-ui-vue-inertia-users/src/resources/js/Pages/**/*.vue`),
+                }
+            }
+        },
+        Components: {
+
+        },
+        ComponentsAsync: {
+            'Dashboard/Widget': {
+                basePath: 'resources/js/ComponentsAsync/Dashboard/Widget',
+                data: [
+                    { path: 'UsersStat' },
+                ]
+            }
+        }
+    }
     ```
-  - in `app/Http/Kernel.php` uncomment
-    ```php
-    \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-    ```
-    
-2. on **Host** machine:
-  - copy **host.frontend..sh** files to `DOCUMENT_ROOT`
-  - update **+x** permission for ***.sh** files,
-  - replace `#!/bin/zsh` from **host.frontend..sh** files to you **bash** bin path
-  - exec `host.frontend.install.sh` on **Host** machine
-  - `npm run build` and chekout browser `APP_URL `
 
 ## Note
 

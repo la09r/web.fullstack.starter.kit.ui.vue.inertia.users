@@ -9,16 +9,8 @@ class PublishSkluviu extends PublishFiles
     private const PATH_FROM = 'vendor/la09r/web-fullstack-starter-kit-ui-vue-inertia-users/src';
     
     private const FILES = [
-//        'resources/js/app.js.php' => ('js/app.js'),
-        
-
-//        'resources/views/auth/nav/dashboard.blade.php' => ('views/auth/nav/dashboard.blade.php'),
-//        'resources/views/layouts/auth.blade.php'       => ('views/layouts/auth.blade.php'),
-//        'resources/views/layouts/dashboard.blade.php'  => ('views/layouts/dashboard.blade.php'),
-//        'resources/views/layouts/public.blade.php'     => ('views/layouts/public.blade.php'),
-//        'resources/views/error.blade.php'              => ('views/error.blade.php'),
-
-        
+        'resources/php/menu/Dashboard/users.php'                      => 'php/menu/Dashboard/users.php',
+        'resources/js/ComponentsAsync/Dashboard/Widget/UsersStat.vue' => 'js/ComponentsAsync/Dashboard/Widget/MainStat.vue',
     ];
     
     protected $signature   = 'app:publish-skluviu';

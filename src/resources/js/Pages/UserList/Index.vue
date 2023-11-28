@@ -2,14 +2,14 @@
     <NavLogin />
     <CardLayoutFluid title="User List" showButtonAdd="false" @callbackButtonAdd="showModalAddUser">
 
-        <DataTableUser :key="componentKeyDataTable" @callbackButtonDelete="onDelete" @showModalEditUser="showModalEditUser"/>
+        <DataTableUser :key="$store.state.users.Page.UserListIndex.forceUsersListCounter" @callbackButtonDelete="deleteButtonUser" @showModalEditUser="showModalEditUser"/>
 
         <Dialog v-model:visible="stateVisibleModalAdd" :modal="false" :closeOnEscape="false"
                 :style="{ width: '80rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
             <template #container="{ stateVisibleModalAdd }">
                 <div class="card">
                     <div class="card-header p-dialog-header">
-                        <div class="p-dialog-title">{{ modalHeaderText }}</div>
+                        <div class="p-dialog-title">{{ $store.state.users.Component.UserProfileForm.text.headerText }}</div>
 
                         <Button aria-label="Close" @click="showModalAddUser" text
                                 class="p-1 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10">
@@ -24,69 +24,7 @@
 
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-4">
-                                <form @submit="onSubmit" class="">
-                                    <div class="mb-3">
-                                        <div class="mb-3">
-                                            <InputGroup>
-                                                <InputGroupAddon>Name</InputGroupAddon>
-                                                <InputText type="text" inputId="form_name_id"
-                                                           name="name"
-                                                           @input="nameField.handleChange"
-                                                           @blur="nameField.handleBlur"
-                                                           v-model="nameField.value"/>
-                                            </InputGroup>
-                                            <small class="mt-1 p-error d-block"
-                                                   id="form_name_id-error">{{ nameField.errorMessage }}</small>
-                                        </div>
-                                        <div class="mb-3">
-                                            <InputGroup>
-                                                <InputGroupAddon>Email</InputGroupAddon>
-                                                <InputText type="text" inputId="form_email_id"
-                                                           name="email"
-                                                           @input="emailField.handleChange"
-                                                           @blur="emailField.handleBlur"
-                                                           v-model="emailField.value"/>
-                                            </InputGroup>
-                                            <small class="mt-1 p-error d-block"
-                                                   id="form_email_id-error">{{ emailField.errorMessage }}</small>
-                                        </div>
-                                        <div class="mb-3">
-                                            <InputGroup>
-                                                <InputGroupAddon>Password</InputGroupAddon>
-                                                <InputText type="text" inputId="form_passwordField_id"
-                                                           name="password"
-                                                           @input="passwordField.handleChange"
-                                                           @blur="passwordField.handleBlur"
-                                                           v-model="passwordField.value"/>
-                                            </InputGroup>
-                                            <small class="mt-1 p-error d-block" id="form_password_id-error">{{
-                                                    passwordField.errorMessage
-                                                }}</small>
-                                        </div>
-                                        <div class="mb-3">
-                                            <InputGroup>
-                                                <InputGroupAddon>Password Confirmation</InputGroupAddon>
-                                                <InputText type="text" inputId="form_password_confirmation_id"
-                                                           name="password_confirmation"
-                                                           @input="passwordConfirmationField.handleChange"
-                                                           @blur="passwordConfirmationField.handleBlur"
-                                                           v-model="passwordConfirmationField.value"/>
-                                            </InputGroup>
-                                            <small class="mt-1 p-error d-block"
-                                                   id="form_password_confirmation_id-error">{{
-                                                    passwordConfirmationField.errorMessage
-                                                }}</small>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <Button type="submit" :label="modalSubmitButtonText"/>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
+                        <UserProfileForm :route="false"/>
                     </div>
                 </div>
             </template>
@@ -101,149 +39,28 @@ import DataTableUser from "./DataTableUser.vue";
 
 import CardLayoutFluid from "@/Layouts/CardLayoutFluid.vue";
 import NavLogin from "@/components/Dashboard/Nav.vue";
-import {getUserData, createPassword} from "@/app.js";
+
 
 import Button from "primevue/button"
 import Dialog from 'primevue/dialog';
 
 // form
-import * as yup from "yup";
-import {reactive} from "vue";
-import {useField, useForm} from 'vee-validate';
-import {useToast} from 'primevue/usetoast';
-import InputGroup from 'primevue/inputgroup';
-import InputGroupAddon from 'primevue/inputgroupaddon'
-import InputText from 'primevue/inputtext';
-import Toast from 'primevue/toast';
+import UserProfileForm from "../UserProfile/Form.vue";
 
-const form1Object = yup.object({
-    name: yup.string().nullable().required().min(2),
-    email: yup.string().nullable().required().min(2),
-    password: yup.string().nullable().required().min(8),
-    password_confirmation: yup.string().nullable().required().min(8),
-});
-
-// form validation intialize
-const {handleSubmit, resetForm} = useForm({
-    validationSchema: form1Object,
-});
+import {getUserData, createPassword} from "@/app.js";
 const USER_DATA = getUserData();
-const PASSWORD  = createPassword();
 
-const nameField = reactive(
-    useField("name", undefined, {initialValue: null})
-);
-const emailField = reactive(
-    useField("email", undefined, {initialValue: null})
-);
-const passwordField = reactive(
-    useField("password", undefined, {initialValue: null})
-);
-const passwordConfirmationField = reactive(
-    useField("password_confirmation", undefined, {initialValue: null})
-);
+import { onDelete } from '../UserProfile/Form.js';
 
-window.dataSubmit = { method: 'insert',  id: null, };
-window.resetForm = resetForm;
-
+import {useToast} from 'primevue/usetoast';
 const toast = useToast();
-const onEdit = async (values) => {
-    const requestOptions = {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            // "Authorization": "Bearer " + USER_DATA.token.bearer ?? 0, // worl fine without token
-        },
-    };
-    fetch(window.location.origin + "/api/backend/user/select/" + values.id, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            window.dataSubmit = { method: 'update',  id: values.id };
-            resetForm({
-                values: {
-                    name:  data.name,
-                    email: data.email,
-                    password: '',
-                    password_confirmation: '',
-                },
-            });
-        });
-};
-window.onEditUser  = onEdit;
+import {useStore} from 'vuex';
+const store = useStore();
 
-const onDelete = async (values) => {
-    values['_token'] = USER_DATA.token.csrf;
-    const requestOptions = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            // "Authorization": "Bearer " + USER_DATA.token.bearer ?? 0, // worl fine without token
-        },
-        body: JSON.stringify(values)
-    };
-    fetch(window.location.origin + "/api/backend/user/delete", requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            if (data.errors) {
-                for (const field in data.errors) {
-                    toast.add({severity: 'error', summary: data.errors[field][0], life: 3000});
-                }
-            } else {
-                toast.add({severity: 'info', summary: 'User deleted', detail: values.value, life: 3000});
-                forceRerender();
-            }
-        });
-};
-const onSubmit = handleSubmit(async (values) => {
-    values['_token'] = USER_DATA.token.csrf;
-    values['id']     = window.dataSubmit.id;
-    const requestOptions = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            // "Authorization": "Bearer " + USER_DATA.token.bearer ?? 0, // worl fine without token
-        },
-        body: JSON.stringify(values)
-    };
-    fetch(window.location.origin + `/api/backend/user/${window.dataSubmit.method}`, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            if (data.errors) {
-                for (const field in data.errors) {
-                    toast.add({severity: 'error', summary: data.errors[field][0], life: 3000});
-                }
-            } else {
-                toast.add({severity: 'info', summary: 'Form Submitted', detail: values.value, life: 3000});
-                const PASSWORD = createPassword();
+function deleteButtonUser(arg) {
+    arg['_token'] = USER_DATA.token.csrf;
 
-                forceRerender();
-
-                if(!window.dataSubmit.id)
-                {
-                    resetForm({
-                        values: {
-                            name:  '',
-                            email: '',
-                            password: PASSWORD,
-                            password_confirmation: PASSWORD,
-                        },
-                    });
-                }
-                    window.dataSubmit = { method: 'insert',  id: null };
-            }
-        });
-});
-// form
-
-import {ref} from 'vue';
-import {useStore} from 'vuex'
-
-const componentKeyDataTable = ref(0);
-
-const forceRerender = () => {
-    componentKeyDataTable.value += 1;
+    onDelete(arg, toast, store);
 };
 
 </script>
@@ -256,8 +73,6 @@ export default {
     data() {
         return {
             stateVisibleModalAdd: false,
-            modalHeaderText: '',
-            modalSubmitButtonText: '',
         }
     },
     mounted() {
@@ -265,31 +80,32 @@ export default {
     },
     methods: {
         showModalAddUser(arg) {
-            window.dataSubmit = { method: 'insert',  id: null };
+            // window.dataSubmit = { method: 'insert',  id: null };
 
-            this.modalHeaderText = 'Add';
-            this.modalSubmitButtonText = 'Submit';
-
-            this.$store.commit('toggleVisibleModalAdd');
-            this.stateVisibleModalAdd = this.$store.state.page.visibleModalAdd;
-
-            window.resetForm({
-                values: {
-                    name:  '',
-                    email: '',
-                    password: '',
-                    password_confirmation: '',
+            this.$store.commit('usersUserProfileFormCommit', {
+                route: 'insert',
+                text: {
+                    buttonSubmitText: 'Add',
+                    headerText: 'Submit',
                 },
+                parameters: arg
             });
+
+            this.$store.commit('usersUserListIndexModalUpdateCommit');
+            this.stateVisibleModalAdd = this.$store.state.users.Page.UserListIndex.visibleModalAdd;
         },
-        showModalEditUser(arg){
-            this.modalHeaderText = 'Edit';
-            this.modalSubmitButtonText = 'Save';
+        showModalEditUser(arg) {
+            this.$store.commit('usersUserProfileFormCommit', {
+                route: 'update',
+                text: {
+                    buttonSubmitText: 'Edit',
+                    headerText: 'Save',
+                },
+                parameters: arg
+            });
 
-            this.$store.commit('toggleVisibleModalAdd');
-            this.stateVisibleModalAdd = this.$store.state.page.visibleModalAdd;
-
-            window.onEditUser(arg);
+            this.$store.commit('usersUserListIndexModalUpdateCommit');
+            this.stateVisibleModalAdd = this.$store.state.users.Page.UserListIndex.visibleModalAdd;
         }
     }
 };

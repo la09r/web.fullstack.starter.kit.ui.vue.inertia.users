@@ -23,7 +23,7 @@ class UserController extends Controller
     public function webProfile(Request $request)
     {
         return Inertia::render('UserProfile/Index', [
-
+            'text' => 'Test UserProfile/Index',
         ]);
     }
 

@@ -1,5 +1,5 @@
 
-export const onDelete = async (values, toast, store) => {
+export const onDelete = async (values, toast, store, route, commit, message) => {
 
     const requestOptions = {
         method: "POST",
@@ -10,7 +10,7 @@ export const onDelete = async (values, toast, store) => {
         },
         body: JSON.stringify(values)
     };
-    fetch(window.location.origin + "/api/backend/user/delete", requestOptions)
+    fetch(window.location.origin + `/api/backend/${route}/delete`, requestOptions)
         .then(response => response.json())
         .then(data => {
             if (data.errors) {
@@ -18,8 +18,8 @@ export const onDelete = async (values, toast, store) => {
                     toast.add({severity: 'error', summary: data.errors[field][0], life: 3000});
                 }
             } else {
-                toast.add({severity: 'info', summary: 'User deleted', detail: values.value, life: 3000});
-                store.commit('usersUserListIndexUpdateCommit');
+                toast.add({severity: 'info', summary: message, detail: values.value, life: 3000});
+                store.commit(commit);
             }
         });
 };

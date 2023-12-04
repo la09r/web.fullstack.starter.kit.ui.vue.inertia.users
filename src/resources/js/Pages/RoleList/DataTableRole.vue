@@ -1,16 +1,15 @@
 <template>
-    <DataTable :value="users" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
+    <DataTable :value="roles" paginator :rows="20" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
         <Column sortable field="id" header="ID"></Column>
         <Column sortable field="name" header="Name">
             <template #body="slotProps">
                 <div class="d-flex align-items-center">
-                    <Button class="me-2" @click="$emit('showModalEditUser', {id: slotProps.data.id})" icon="pi pi-user-edit" label="Edit" severity="primary"></Button>
+                    <Button class="me-2" @click="$emit('showModalEditRole', {id: slotProps.data.id})" icon="pi pi-user-edit" label="Edit" severity="primary"></Button>
                     <span>{{ slotProps.data.name }}</span>
                 </div>
             </template>
         </Column>
-        <Column sortable field="email" header="Email"></Column>
-        <Column sortable field="role_name" header="Role"></Column>
+        <Column sortable field="code" header="Code"></Column>
         <Column field="id" header="Action">
             <template #body="slotProps">
                 <Button @click="confirmDelete({id: slotProps.data.id})" icon="pi pi-times" label="Delete" severity="danger"></Button>
@@ -46,10 +45,10 @@ const confirmDelete = (data) => {
 </script>
 <script>
 export default {
-    name: "DataTableUser",
+    name: "DataTableRole",
     data() {
         return {
-            users: [],
+            roles: [],
         }
     },
     mounted() {
@@ -60,10 +59,10 @@ export default {
                 // "Authorization": "Bearer " + USER_DATA.token.bearer ?? 0, // worl fine without token
             },
         };
-        fetch(window.location.origin + "/api/backend/user/list", requestOptions)
+        fetch(window.location.origin + "/api/backend/role/list", requestOptions)
             .then(response => response.json())
             .then(data => {
-                this.users = data
+                this.roles = data
             });
     },
 }

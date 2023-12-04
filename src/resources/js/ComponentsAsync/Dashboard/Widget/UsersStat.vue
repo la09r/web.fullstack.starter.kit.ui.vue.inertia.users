@@ -1,5 +1,5 @@
 <template>
-    Widget 3: Users
+    Widget Users
 </template>
 
 <script>

@@ -1,17 +1,17 @@
 <template>
     <NavLogin />
-    <CardLayoutFluid title="User List" :showButtonAdd="true" @callbackButtonAdd="showModalAddUser">
+    <CardLayoutFluid title="Role List" :showButtonAdd="true" @callbackButtonAdd="showModalAddRole">
 
-        <DataTableUser :key="$store.state.users.Page.UserListIndex.forceUsersListCounter" @callbackButtonDelete="deleteButtonUser" @showModalEditUser="showModalEditUser"/>
+        <DataTableUser :key="$store.state.users.Page.RoleListIndex.forceUsersListCounter" @callbackButtonDelete="deleteButtonUser" @showModalEditRole="showModalEditRole"/>
 
         <Dialog v-model:visible="stateVisibleModalAdd" :modal="false" :closeOnEscape="false"
                 :style="{ width: '80rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
             <template #container="{ stateVisibleModalAdd }">
                 <div class="card">
                     <div class="card-header p-dialog-header">
-                        <div class="p-dialog-title">{{ $store.state.users.Component.UserProfileForm.text.headerText }}</div>
+                        <div class="p-dialog-title">{{ $store.state.users.Component.RoleForm.text.headerText }}</div>
 
-                        <Button aria-label="Close" @click="showModalAddUser" text
+                        <Button aria-label="Close" @click="showModalAddRole" text
                                 class="p-1 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10">
                             <svg width="12" height="12" viewBox="0 0 14 14" fill="none"
                                  xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +24,7 @@
 
                     </div>
                     <div class="card-body">
-                        <UserProfileForm :route="false"/>
+                        <RoleForm :route="false"/>
                     </div>
                 </div>
             </template>
@@ -35,7 +35,7 @@
 
 <script setup>
 
-import DataTableUser from "./DataTableUser.vue";
+import DataTableUser from "./DataTableRole.vue";
 
 import CardLayoutFluid from "@/Layouts/CardLayoutFluid.vue";
 import NavLogin from "@/components/Dashboard/Nav.vue";
@@ -45,7 +45,7 @@ import Button from "primevue/button"
 import Dialog from 'primevue/dialog';
 
 // form
-import UserProfileForm from "../UserProfile/Form.vue";
+import RoleForm from "./Form.vue";
 
 import {getUserData, createPassword} from "@/app.js";
 const USER_DATA = getUserData();
@@ -60,7 +60,7 @@ const store = useStore();
 function deleteButtonUser(arg) {
     arg['_token'] = USER_DATA.token.csrf;
 
-    onDelete(arg, toast, store, 'user', 'usersUserListIndexUpdateCommit', 'User deleted');
+    onDelete(arg, toast, store, 'role', 'usersRoleListIndexUpdateCommit', 'Role deleted');
 };
 
 </script>
@@ -79,10 +79,10 @@ export default {
 
     },
     methods: {
-        showModalAddUser(arg) {
+        showModalAddRole(arg) {
             // window.dataSubmit = { method: 'insert',  id: null };
 
-            this.$store.commit('usersUserProfileFormCommit', {
+            this.$store.commit('usersRoleFormCommit', {
                 route: 'insert',
                 text: {
                     buttonSubmitText: 'Submit',
@@ -91,11 +91,11 @@ export default {
                 parameters: arg
             });
 
-            this.$store.commit('usersUserListIndexModalUpdateCommit');
-            this.stateVisibleModalAdd = this.$store.state.users.Page.UserListIndex.visibleModalAdd;
+            this.$store.commit('usersRoleListIndexModalUpdateCommit');
+            this.stateVisibleModalAdd = this.$store.state.users.Page.RoleListIndex.visibleModalAdd;
         },
-        showModalEditUser(arg) {
-            this.$store.commit('usersUserProfileFormCommit', {
+        showModalEditRole(arg) {
+            this.$store.commit('usersRoleFormCommit', {
                 route: 'update',
                 text: {
                     buttonSubmitText: 'Edit',
@@ -104,8 +104,8 @@ export default {
                 parameters: arg
             });
 
-            this.$store.commit('usersUserListIndexModalUpdateCommit');
-            this.stateVisibleModalAdd = this.$store.state.users.Page.UserListIndex.visibleModalAdd;
+            this.$store.commit('usersRoleListIndexModalUpdateCommit');
+            this.stateVisibleModalAdd = this.$store.state.users.Page.RoleListIndex.visibleModalAdd;
         }
     }
 };

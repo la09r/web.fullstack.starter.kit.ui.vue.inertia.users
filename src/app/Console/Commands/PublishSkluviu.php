@@ -9,6 +9,7 @@ class PublishSkluviu extends PublishFiles
     private const PATH_FROM = 'vendor/la09r/web-fullstack-starter-kit-ui-vue-inertia-users/src';
     
     private const FILES = [
+        'config/authservices.php'                                     => 'config/authservices.php',
         'app/Console/Commands/Gates.php'                              => 'app/Console/Commands/Gates.php',
         'resources/js/Components/Dashboard/AuthServices.vue'          => 'js/Components/Dashboard/AuthServices.vue',
 
@@ -24,13 +25,16 @@ class PublishSkluviu extends PublishFiles
         $this->publishFiles(self::FILES, self::PATH_FROM);
 
         $this->publisRoles();
-//        $this->publishUserRole();
+        $this->publishUserRole();
 
         print PHP_EOL . $this->description . PHP_EOL;
     }
 
     private function publisRoles()
     {
+        $count = \LA09R\StarterKit\UI\Vue\Inertia\Users\App\Models\Role::all()->count();
+        if($count != 0) { return; }
+        
         $roles = [
             [
                 'name' => 'Developer',
@@ -75,7 +79,7 @@ class PublishSkluviu extends PublishFiles
     private function publishUserRole()
     {
         $user = \App\Models\User::all()->sortByDesc('id')->first();
-        $user->role = 3;
+        $user->role_id = 3;
         $user->save();
     }
 }

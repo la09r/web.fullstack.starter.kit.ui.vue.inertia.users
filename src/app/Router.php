@@ -26,12 +26,27 @@ class Router
 
     private static function setConfig($service, $login)
     {
-        $userAuthService = UsersAuthService::where(['service_id' => $service, 'login' => $login])->first()->toArray();
+        try
+        {
+            $userAuthService = UsersAuthService::where(['service_id' => $service, 'login' => $login])->first()->toArray();
+        }
+        catch (\Exception | \Error $e)
+        {
+            $userAuthService = null;
+        }
+
+        if(!$userAuthService)
+        {
+            return false;
+        }
+
         $secrets         = json_decode(str_replace(["\n", ' '], [''], $userAuthService['secrets']), true);
 
         config(['services.github.client_id'     => $secrets['client_id']]);
         config(['services.github.client_secret' => $secrets['client_secret']]);
         config(['services.github.redirect'      => env('APP_URL') . self::getAuthServiceLoginUrl($service, $login, config('authservices.app.login') )]);
+        
+        return true;
     }
 
     public static function webRoutes()
@@ -48,37 +63,52 @@ class Router
 
         // auth services
         Route::get(config('authservices.app.auth'), function ($service_id, $service_user_id) {
-            if(!in_array($service_id, ['github']))
-            {
-                return redirect('/');
-            }
-            self::setConfig($service_id, $service_user_id);
-
-                return Socialite::driver($service_id)->redirect();
-
-        });
-        Route::get(config('authservices.app.login'), function ($service_id, $service_user_id) {
-            if(!in_array($service_id, ['github']))
-            {
-                return redirect('/');
-            }
-            self::setConfig($service_id, $service_user_id);
-
-            $githubUser  = Socialite::driver('github')->user();
-            $userService = UsersAuthService::where(['service_id' => $service_id, 'login' => $githubUser->nickname,])->first();
-
-            if(!$userService->exists())
+            if(!self::setConfig($service_id, $service_user_id))
             {
                 return redirect(route('login'));
             }
 
-            $userService->update([
-                'email'    => $githubUser->email,
-                'avatar'   => $githubUser->avatar,
-            ]);
+            if(in_array($service_id, ['github']))
+            {
+                return Socialite::driver($service_id)->redirect();
+            }
 
-            $user = \App\Models\User::where(['id' => $userService->user_id])->first();
-            Auth::login($user);
+                return redirect(route('route.public'));
+        });
+        Route::get(config('authservices.app.login'), function ($service_id, $service_user_id) {
+            if(!self::setConfig($service_id, $service_user_id))
+            {
+                return redirect(route('login'));
+            }
+
+            if(in_array($service_id, ['github']))
+            {
+                $userService = Socialite::driver($service_id)->user();
+            }
+            else
+            {
+                $userService = null;
+            }
+
+            if($service_id  == 'github' && !empty($userService))
+            {
+                $user = UsersAuthService::where(['service_id' => $service_id, 'login' => $userService->nickname,])->first();
+            }
+            else
+            {
+                $user = new class { public function exists() { return false; } };
+            }
+
+            if(!$user->exists())
+            {
+                return redirect(route('route.public'));
+            }
+
+            $user->update([
+                'email'    => $userService->email,
+                'avatar'   => $userService->avatar,
+            ]);
+            Auth::login(\App\Models\User::where(['id' => $user->user_id])->first());
 
             return redirect(route('route.dashboard'));
         });

@@ -135,11 +135,21 @@ class UserController extends Controller
                                UsersAuthService::where(['user_id' => $id])->delete();
         foreach ($post['auth_services'] ?? [] as $item)
         {
+            try
+            {
+                $json = json_decode(str_replace([' ', "\n"], ['', ''], $item['value']), true);
+            }
+            catch (\Exception | \Error $e)
+            {
+                $json = '';
+            }
+
             $userAuthService = UsersAuthService::create([
                 'user_id'       => $id,
                 'service_id'    => $item['service_id'],
                 'secrets'       => $item['value'], // str_replace(["\n", ' '], [''], $item['value']),
-                'name'          => $item['name']
+                'name'          => $item['name'],
+                'login'         => $json['client_username'] ?? '',
             ]);
         }
 

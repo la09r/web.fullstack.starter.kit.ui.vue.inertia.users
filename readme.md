@@ -4,7 +4,7 @@
 
 1. **Homestead** virtual machine:
   - installed and configured for cli: PHP v. 8.1, Composer, Git
-2**Host** machine:
+2. **Host** machine:
   - installed and configured for cli: Node(JavaScript runtime environment) v. 18
 
 ## Install
@@ -106,24 +106,3 @@
         }
     },
     ```
-
-## Note
-
-Frontend NPM packages with data tables for Vue, November 2023:
-- Suite
-  - https://primevue.org/datatable/#single_sort
-  - https://vuetifyjs.com/en/components/data-tables/basics/
-  - https://bootstrap-vue.org/docs/components/table#pagination
-  - https://buefy.org/documentation/table
-- Library
-  - https://happy-coding-clans.github.io/vue-easytable/#/en/demo?ref=madewithvuejs.com
-  - https://revolist.github.io/revogrid/demo/
-  - https://handsontable.com/docs/javascript-data-grid/vue3-installation/?ref=madewithvuejs.com
-  - https://xaksis.github.io/vue-good-table/guide/configuration/sort-options.html#enabled
-  - https://njleonzhang.github.io/vue-data-tables/#/en-us/sort
-  - https://github.com/DataTables/Vue
-  - https://github.com/TheoXiong/vue-table-dynamic
-  - https://niiknow.github.io/vue-datatables-net/
-  - https://github.com/iliakut/food-table
-  - https://github.com/aquilesb/v-datatable-light
-  - https://github.com/HC200ok/vue3-easy-data-table

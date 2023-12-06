@@ -5,22 +5,22 @@ $accessUsers = Illuminate\Support\Facades\Gate::allows('isUserAccess');
 $itemsNotUsersAccess = [
     [
         'title' => __('Profile'),
-        'link'  => route('web.route.dashboard.profile'),
+        'link'  => route('users.web.route.dashboard.profile'),
     ],
 ];
 
 $itemsWithUsersAccess = [
     [
         'title' => __('Users'),
-        'link'  => route('web.route.dashboard.user.list'),
+        'link'  => route('users.web.route.dashboard.user.list'),
     ],
     [
         'title' => __('Roles'),
-        'link'  => route('web.route.dashboard.role.list'),
+        'link'  => route('users.web.route.dashboard.role.list'),
     ],
     [
         'title' => __('Welcome'),
-        'link'  => route('route.dashboard.welcome'),
+        'link'  => route('users.web.route.dashboard.welcome'),
     ],
 ];
 

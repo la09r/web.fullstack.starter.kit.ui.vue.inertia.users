@@ -4,7 +4,7 @@
 
 1. **Homestead** virtual machine:
   - installed and configured for cli: PHP v. 8.1, Composer, Git
-2. **Host** machine:
+2**Host** machine:
   - installed and configured for cli: Node(JavaScript runtime environment) v. 18
 
 ## Install

@@ -2,7 +2,7 @@
     <NavLogin />
   <CardLayoutFluid title="Dashboard">
     {{ text }} 3 <br>
-    <Link class="link-primary" :href="route('route.dashboard.welcome')">Welcome</Link>
+    <Link class="link-primary" :href="route('users.web.route.dashboard.welcome')">Welcome</Link>
   </CardLayoutFluid>
 </template>
 

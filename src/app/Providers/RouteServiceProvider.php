@@ -11,15 +11,6 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * The path to your application's "home" route.
-     *
-     * Typically, users are redirected here after authentication.
-     *
-     * @var string
-     */
-    public const HOME  = '/dashboard';
-
-    /**
      * Define your route model bindings, pattern filters, and other route configuration.
      */
     public function boot(): void
@@ -31,10 +22,9 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
-                ->group(base_path('vendor/la09r/web-fullstack-starter-kit-ui-vue-inertia-users/src/routes/api.php'));
-
+                ->group(__DIR__ . '/../../routes/api.php');
             Route::middleware('web')
-                ->group(base_path('vendor/la09r/web-fullstack-starter-kit-ui-vue-inertia-users/src/routes/web.php'));
+                ->group(__DIR__ . '/../../routes/web.php');
         });
     }
 }

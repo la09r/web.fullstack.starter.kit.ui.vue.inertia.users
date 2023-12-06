@@ -15,6 +15,8 @@ use LA09R\StarterKit\UI\Vue\Inertia\Users\App\Http\Controllers\RoleController;
 
 use LA09R\StarterKit\UI\Vue\Inertia\Users\App\Models\User as UserPackage;
 
+use LA09R\StarterKit\UI\Vue\Inertia\App\Providers\RouteServiceProvider;
+
 class Router
 {
     private static function getAuthServiceLoginUrl($service, $login, $url)
@@ -52,20 +54,24 @@ class Router
     public static function webRoutes()
     {
         Route::middleware(['auth'])->group(function () {
-            Route::get('/dashboard/profile', [ UserController::class, 'webProfile' ])->name('web.route.dashboard.profile');
+            Route::get(RouteServiceProvider::HOME . '/profile', [ UserController::class, 'webProfile' ])->name('users.' . RouteServiceProvider::PREFIX_WEB_HOME . '.profile');
         });
-        Route::middleware(['auth', 'can:isUserAccess'])->group(function () {
-            Route::get('/dashboard/welcome', [ DashboardController::class, 'welcome' ])->name('route.dashboard.welcome');
-            Route::get('/dashboard/user/list', [ UserController::class, 'webList' ])->name('web.route.dashboard.user.list');
-            Route::get('/dashboard/role/list', [ RoleController::class, 'webList' ])->name('web.route.dashboard.role.list');
-//            Route::get('/dashboard/permission', [ UserController::class, 'webPermissionList' ])->name('web.route.dashboard.permission.list');
+
+        $routes = [
+            [ 'method' => 'get',  'url' => RouteServiceProvider::HOME . '/welcome',   'handler' => [ DashboardController::class, 'welcome' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_WEB_HOME . '.welcome'],
+            [ 'method' => 'get',  'url' => RouteServiceProvider::HOME . '/user/list', 'handler' => [ UserController::class,      'webList' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_WEB_HOME . '.user.list'],
+            [ 'method' => 'get',  'url' => RouteServiceProvider::HOME . '/role/list', 'handler' => [ RoleController::class,      'webList' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_WEB_HOME . '.role.list'],
+        ];
+
+        Route::middleware(['auth', 'can:isUserAccess'])->group(function () use($routes) {
+            RouteServiceProvider::createRoutes($routes);
         });
 
         // auth services
         Route::get(config('authservices.app.auth'), function ($service_id, $service_user_id) {
             if(!self::setConfig($service_id, $service_user_id))
             {
-                return redirect(route('login'));
+                return redirect(route(str_replace('/', '', RouteServiceProvider::LOGIN)));
             }
 
             if(in_array($service_id, ['github']))
@@ -73,12 +79,12 @@ class Router
                 return Socialite::driver($service_id)->redirect();
             }
 
-                return redirect(route('route.public'));
-        });
+                return redirect(route('main.' . RouteServiceProvider::PREFIX_WEB . '.public'));
+        })->name('users.' . RouteServiceProvider::PREFIX_API_HOME . '.service.auth');
         Route::get(config('authservices.app.login'), function ($service_id, $service_user_id) {
             if(!self::setConfig($service_id, $service_user_id))
             {
-                return redirect(route('login'));
+                return redirect(route(str_replace('/', '', RouteServiceProvider::LOGIN)));
             }
 
             if(in_array($service_id, ['github']))
@@ -101,7 +107,7 @@ class Router
 
             if(!$user->exists())
             {
-                return redirect(route('route.public'));
+                return redirect(route('main.' . RouteServiceProvider::PREFIX_WEB . '.public'));
             }
 
             $user->update([
@@ -110,30 +116,38 @@ class Router
             ]);
             Auth::login(\App\Models\User::where(['id' => $user->user_id])->first());
 
-            return redirect(route('route.dashboard'));
-        });
+            return redirect(route('main.' . RouteServiceProvider::PREFIX_WEB . '.dashboard'));
+        })->name('users.' . RouteServiceProvider::PREFIX_API_HOME . '.service.login');
     }
 
     public static function apiRoutes()
     {
-        Route::get('/backend/nav/auth', [ NavController::class, 'apiAuth' ])->name('api.route.nav.auth');
+        Route::get(RouteServiceProvider::BACK . '/nav/auth', [ NavController::class, 'apiAuth' ])->name('users.api.route.nav.auth');
 
-        Route::middleware(['auth:sanctum'])->group(function () {
-            Route::get('/backend/user/select/{id}', [ UserController::class, 'apiSelect' ])->name('api.route.dashboard.user.select');
-            Route::post('/backend/user/update', [ UserController::class, 'apiUpdate' ])->name('api.route.dashboard.user.update');
+        $routes = [
+            [ 'method' => 'get',  'url' => RouteServiceProvider::BACK . '/user/select/{id}', 'handler' => [ UserController::class, 'apiSelect' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.user.select'],
+            [ 'method' => 'post', 'url' => RouteServiceProvider::BACK . '/user/update',      'handler' => [ UserController::class, 'apiUpdate' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.user.update'],
+        ];
+
+        Route::middleware(['auth:sanctum'])->group(function () use($routes) {
+            RouteServiceProvider::createRoutes($routes);
         });
 
-        Route::middleware(['auth:sanctum', 'can:isUserAccess'])->group(function () {
-            Route::get('/backend/user/new',     [ UserController::class, 'apiNew' ])->name('api.route.dashboard.user.new');
-            Route::get('/backend/user/list',    [ UserController::class, 'apiList' ])->name('api.route.dashboard.user.list');
-            Route::post('/backend/user/insert', [ UserController::class, 'apiInsert' ])->name('api.route.dashboard.user.insert');
-            Route::post('/backend/user/delete', [ UserController::class, 'apiDelete' ])->name('api.route.dashboard.user.delete');
+        $routes = [
+            [ 'method' => 'get',  'url' => RouteServiceProvider::BACK . '/user/new',    'handler' => [ UserController::class, 'apiNew' ],    'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.user.new'],
+            [ 'method' => 'get',  'url' => RouteServiceProvider::BACK . '/user/list',   'handler' => [ UserController::class, 'apiList' ],   'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.user.list'],
+            [ 'method' => 'post', 'url' => RouteServiceProvider::BACK . '/user/insert', 'handler' => [ UserController::class, 'apiInsert' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.user.insert'],
+            [ 'method' => 'post', 'url' => RouteServiceProvider::BACK . '/user/delete', 'handler' => [ UserController::class, 'apiDelete' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.user.delete'],
 
-            Route::get('/backend/role/select/{id}', [ RoleController::class, 'apiSelect' ])->name('api.route.dashboard.role.select');
-            Route::get('/backend/role/list',    [ RoleController::class, 'apiList' ])->name('api.route.dashboard.role.list');
-            Route::post('/backend/role/insert', [ RoleController::class, 'apiInsert' ])->name('api.route.dashboard.role.insert');
-            Route::post('/backend/role/update', [ RoleController::class, 'apiUpdate' ])->name('api.route.dashboard.role.update');
-            Route::post('/backend/role/delete', [ RoleController::class, 'apiDelete' ])->name('api.route.dashboard.role.delete');
+            [ 'method' => 'get',  'url' => RouteServiceProvider::BACK . '/role/select/{id}', 'handler' => [ RoleController::class, 'apiSelect' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.role.select'],
+            [ 'method' => 'get',  'url' => RouteServiceProvider::BACK . '/role/list',        'handler' => [ RoleController::class, 'apiList' ],   'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.role.list'],
+            [ 'method' => 'post', 'url' => RouteServiceProvider::BACK . '/role/insert',      'handler' => [ RoleController::class, 'apiInsert' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.role.insert'],
+            [ 'method' => 'post', 'url' => RouteServiceProvider::BACK . '/role/update',      'handler' => [ RoleController::class, 'apiUpdate' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.role.update'],
+            [ 'method' => 'post', 'url' => RouteServiceProvider::BACK . '/role/delete',      'handler' => [ RoleController::class, 'apiDelete' ], 'name' => 'users.' . RouteServiceProvider::PREFIX_API_HOME . '.role.delete'],
+        ];
+
+        Route::middleware(['auth:sanctum', 'can:isUserAccess'])->group(function () use($routes) {
+            RouteServiceProvider::createRoutes($routes);
         });
     }
 }
